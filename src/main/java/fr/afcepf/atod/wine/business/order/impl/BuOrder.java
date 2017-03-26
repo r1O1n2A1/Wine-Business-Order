@@ -16,6 +16,7 @@ import fr.afcepf.atod.wine.entity.Product;
 import java.io.Serializable;
 import java.util.HashSet;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,20 +27,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class BuOrder implements IBuOrder {
     /**
-     * quantity initial = 1
+     * Constante pour la quantité initiale d'articles (1).
      */
     private static final int QUANTITY_INIT = 1;
-   
+	/**
+	 * Logger de log 4j pour les codes d'erreur.
+	 */
+    private Logger log = Logger.getLogger(BuOrder.class);
+	/**
+	 * Gestion de l'injection via Spring par
+	 * l'annotation autowired. 
+	 */
     @Autowired
-    private IDaoOrder daoOrder;
-       
-    /**
-     * 
-     * @param order
-     * @param product
-     * @return
-     * @throws WineException 
-     */    
+    private IDaoOrder daoOrder;  
     @Override
     public Order addItemCart(Order order, Product product) throws WineException {
         boolean itemFoundInCart  = false;
@@ -53,31 +53,28 @@ public class BuOrder implements IBuOrder {
                    itemFoundInCart = true;
                }
            }
-           
            if (itemFoundInCart == false) {
                insertNewOrderDetail(order, product);
            }
        }
        return order;
     }
-    
+    /**
+     * Méthode privée pour l'ajout de détails d'une commande.
+     * @param order l'objet {@link Order}.
+     * @param product l'objet {@link Product}.
+     */
     private void insertNewOrderDetail(Order order, Product product) {
         order.getOrdersDetail().add(
                 new OrderDetail(null,QUANTITY_INIT, order, product));
     }
-
-    /**
-     * enregister une nouvelle commande a la base
-     */
 	@Override
 	public Order addNewOrder(Order order) throws WineException {
 		daoOrder.insertObj(order);
 		return order;
 	}
-
 	@Override
 	public Order getLastOrderByCustomer(Customer customer) {
-		
 		return daoOrder.getLastOrderByCustomer(customer);
 	}
 }
