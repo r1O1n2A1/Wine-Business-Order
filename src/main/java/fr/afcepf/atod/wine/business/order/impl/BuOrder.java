@@ -39,7 +39,8 @@ public class BuOrder implements IBuOrder {
 	 * l'annotation autowired. 
 	 */
     @Autowired
-    private IDaoOrder daoOrder;  
+    private IDaoOrder daoOrder;
+    
     @Override
     public Order addItemCart(Order order, Product product) throws WineException {
         boolean itemFoundInCart  = false;
