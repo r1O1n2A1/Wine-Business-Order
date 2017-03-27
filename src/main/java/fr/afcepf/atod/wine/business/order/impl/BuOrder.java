@@ -21,13 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author ronan
+ * Classe pour les r√®gles de gestion li√© √† un {@link Order}
+ * dans l'application.
+ * @author ronan - Metabeen
  */
 @Service
 public class BuOrder implements IBuOrder {
     /**
-     * Constante pour la quantitÈ initiale d'articles (1).
+     * Constante pour la quantit√©  initiale d'articles (1).
      */
     private static final int QUANTITY_INIT = 1;
 	/**
@@ -61,7 +62,7 @@ public class BuOrder implements IBuOrder {
        return order;
     }
     /**
-     * MÈthode privÈe pour l'ajout de dÈtails d'une commande.
+     * M√©thode priv√©e pour l'ajout de d√©tails d'une commande.
      * @param order l'objet {@link Order}.
      * @param product l'objet {@link Product}.
      */
