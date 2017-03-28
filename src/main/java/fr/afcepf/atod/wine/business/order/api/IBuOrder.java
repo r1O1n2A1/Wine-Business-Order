@@ -26,6 +26,6 @@ public interface IBuOrder {
     
     Order addNewOrder(Order order) throws WineException; 
     
-    Order getLastOrderByCustomer(Customer customer); 
+    Order getLastOrderByCustomer(Customer customer) throws WineException; 
     
 }
