@@ -76,7 +76,7 @@ public class BuOrder implements IBuOrder {
 		return order;
 	}
 	@Override
-	public Order getLastOrderByCustomer(Customer customer) {
+	public Order getLastOrderByCustomer(Customer customer) throws WineException {
 		return daoOrder.getLastOrderByCustomer(customer);
 	}
 }

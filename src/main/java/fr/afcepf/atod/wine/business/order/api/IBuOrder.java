@@ -44,6 +44,6 @@ public interface IBuOrder {
      * récupérer la {@link Order}.
      * @return un {@link Order} de l'unité de persistence.
      */
-    Order getLastOrderByCustomer(Customer customer); 
+    Order getLastOrderByCustomer(Customer customer) throws WineException; 
     
 }
