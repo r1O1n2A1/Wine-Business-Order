@@ -5,41 +5,42 @@
  */
 package fr.afcepf.atod.wine.business.order.impl;
 
+import java.util.HashSet;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import fr.afcepf.atod.vin.data.exception.WineException;
 import fr.afcepf.atod.wine.business.order.api.IBuOrder;
 import fr.afcepf.atod.wine.data.order.api.IDaoOrder;
-import fr.afcepf.atod.wine.data.order.impl.DaoOrder;
 import fr.afcepf.atod.wine.entity.Customer;
 import fr.afcepf.atod.wine.entity.Order;
 import fr.afcepf.atod.wine.entity.OrderDetail;
 import fr.afcepf.atod.wine.entity.Product;
-import java.io.Serializable;
-import java.util.HashSet;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
- *
- * @author ronan
+ * Classe pour les règles de gestion lié à un {@link Order}
+ * dans l'application.
+ * @author ronan - Metabeen
  */
 @Service
 public class BuOrder implements IBuOrder {
     /**
-     * quantity initial = 1
+     * Constante pour la quantité  initiale d'articles (1).
      */
     private static final int QUANTITY_INIT = 1;
-   
+	/**
+	 * Logger de log 4j pour les codes d'erreur.
+	 */
+    private Logger log = Logger.getLogger(BuOrder.class);
+	/**
+	 * Gestion de l'injection via Spring par
+	 * l'annotation autowired. 
+	 */
     @Autowired
     private IDaoOrder daoOrder;
-       
-    /**
-     * 
-     * @param order
-     * @param product
-     * @return
-     * @throws WineException 
-     */    
+    
     @Override
     public Order addItemCart(Order order, Product product) throws WineException {
         boolean itemFoundInCart  = false;
@@ -53,31 +54,28 @@ public class BuOrder implements IBuOrder {
                    itemFoundInCart = true;
                }
            }
-           
            if (itemFoundInCart == false) {
                insertNewOrderDetail(order, product);
            }
        }
        return order;
     }
-    
+    /**
+     * Méthode privée pour l'ajout de détails d'une commande.
+     * @param order l'objet {@link Order}.
+     * @param product l'objet {@link Product}.
+     */
     private void insertNewOrderDetail(Order order, Product product) {
         order.getOrdersDetail().add(
                 new OrderDetail(null,QUANTITY_INIT, order, product));
     }
-
-    /**
-     * enregister une nouvelle commande a la base
-     */
 	@Override
 	public Order addNewOrder(Order order) throws WineException {
 		daoOrder.insertObj(order);
 		return order;
 	}
-
 	@Override
 	public Order getLastOrderByCustomer(Customer customer) throws WineException {
-		
 		return daoOrder.getLastOrderByCustomer(customer);
 	}
 }
