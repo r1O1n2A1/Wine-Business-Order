@@ -41,5 +41,13 @@ public interface IBuOrder {
      * @return un {@link Order} de l'unité de persistence.
      */
     Order getLastOrderByCustomer(Customer customer) throws WineException; 
-    
+    /**
+     * Methode qui appelle le W.S paypal
+     * @param order {@link Order}
+     * @param shipping price shipping
+     * @param total price total
+     * @return
+     * @throws WineException
+     */
+    Order checkoutPaypal(Order order, double shipping, double total) throws WineException;
 }
