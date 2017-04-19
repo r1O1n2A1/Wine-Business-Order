@@ -49,5 +49,15 @@ public interface IBuOrder {
      * @return
      * @throws WineException
      */
-    Order checkoutPaypal(Order order, double shipping, double total) throws WineException;
+    Order checkoutPaypal(Order order, double shipping, double total) 
+    		throws WineException;
+    
+    /**
+     * @param order {@link Order}
+     * @param total order
+     * @return
+     * @throws WineException {@link WineException}
+     */
+    Order checkoutShipping(Customer customer, Order order, double total) 
+    		throws WineException;
 }

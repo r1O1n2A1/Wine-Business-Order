@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.afcepf.atod.vin.data.exception.WineErrorCode;
 import fr.afcepf.atod.vin.data.exception.WineException;
 import fr.afcepf.atod.wine.business.order.api.IBuOrder;
 import fr.afcepf.atod.wine.data.order.api.IDaoOrder;
@@ -17,6 +18,11 @@ import fr.afcepf.atod.wine.entity.Customer;
 import fr.afcepf.atod.wine.entity.Order;
 import fr.afcepf.atod.wine.entity.OrderDetail;
 import fr.afcepf.atod.wine.entity.Product;
+import fr.afcepf.atod.ws.soap.shipping.Exception_Exception;
+import fr.afcepf.atod.ws.soap.shipping.FollowOrder.DetailOrder;
+import fr.afcepf.atod.ws.soap.shipping.ISoapShippingService;
+import fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder;
+import fr.afcepf.atod.ws.soap.shipping.SoapShippingServiceService;
 import fr.afcepf.wine.paypal.CheckoutPaypal.DetailsPayment;
 import fr.afcepf.wine.paypal.CheckoutPaypal.DetailsPayment.Entry;
 import fr.afcepf.wine.paypal.ExpressCheckoutServiceService;
@@ -46,8 +52,12 @@ public class BuOrder implements IBuOrder {
 	@Autowired
 	private IDaoOrder daoOrder;
 	private IExpressCheckout proxy = null;
+	private ISoapShippingService proxyShipping = null;
 	private Payment paymentPaypal = null;
 	private DecimalFormat df = new DecimalFormat("0.##");
+	
+	public static final String SEPARATOR_STR = "|";
+	
 	@Override
 	public Order addItemCart(Order order, Product product) throws WineException {
 		boolean itemFoundInCart  = false;
@@ -85,6 +95,13 @@ public class BuOrder implements IBuOrder {
 	public Order getLastOrderByCustomer(Customer customer) throws WineException {
 		return daoOrder.getLastOrderByCustomer(customer);
 	}
+	
+	/**
+	 * ----------------------------------------------------
+	 * PAYMENT PART - call ORCHESTRATOR WS
+	 * ----------------------------------------------------
+	 */
+	
 
 	/* (non-Javadoc)
 	 * @see fr.afcepf.atod.wine.business.order.api.IBuOrder#checkoutPaypal(fr.afcepf.atod.wine.entity.Order)
@@ -135,21 +152,139 @@ public class BuOrder implements IBuOrder {
 		} else {
 			log.error("empty order | order has to be fulfil");
 		}
+		
 		Entry entry = new Entry();
 		entry.setKey("total");
 		entry.setValue(df.format(total));
 		entries.add(entry);
+		
 		entry = new Entry();
 		entry.setKey("shipping");
 		entry.setValue(String.valueOf(shipping));
 		entries.add(entry);
-		detailsPayment.getEntry().addAll(entries);
+		
+		entry = new Entry();
+		entry.setKey("idOrder");
+		if (order != null) {
+			entry.setValue(order.getId().toString());
+		}
+		entries.add(entry);
+		
+		detailsPayment.getEntry().addAll(entries);		
 		return detailsPayment;
 	}
 	
 	/**
+	 * ----------------------------------------------------
+	 *  SHIPPING PART - call ORCHESTRATOR WS
+	 * ----------------------------------------------------
+	 */
+	
+	
+	/*
+	 * (non-Javadoc)
+	 * @see fr.afcepf.atod.wine.business.order.api.IBuOrder#checkoutShipping(fr.afcepf.atod.wine.entity.Order, double)
+	 */
+	
+	@Override
+	public Order checkoutShipping(Customer customer, Order order, double total) 
+			throws WineException {
+		WineException wineException = null;
+		proxyShipping = new SoapShippingServiceService().getSoapShippingServicePort();
+		DetailsOrder detailsOrder = new DetailsOrder();
+		if (proxyShipping != null) {
+			detailsOrder = setDetailOrderForShipping(detailsOrder, order, total);
+			detailsOrder = addCustomerInfosForShipping(customer, detailsOrder);
+			try {
+				proxyShipping.setShipping(detailsOrder);
+			} catch (Exception_Exception e) {
+				log.error(e);
+				wineException.setErreurVin(WineErrorCode.CA_NE_FONCTIONNE_PAS);
+				wineException = new WineException(e.getMessage());
+			}
+		}
+		if (wineException != null) {
+			throw wineException;
+		}
+		return order;
+	}	
+		
+	/**
+	 * Set the order to a Map<string,string> in order
+	 * to be sent to the SOAP WS
+	 * @param detailsOrder {@link DetailsOrder}
+	 * @param order {@link Order}
+	 * @param total
+	 * @return
+	 */
+	private DetailsOrder setDetailOrderForShipping(DetailsOrder detailsOrder, Order order,
+			double total) {
+		List<fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder.Entry> entries
+			= new ArrayList<>();
+		// create a list
+		int temp = 1;
+		if (order != null && order.getOrdersDetail() != null) {
+			for (OrderDetail orderDetail : order.getOrdersDetail()) {
+				double discount = calculDiscount(orderDetail);
+				fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder.Entry entry 
+				= new fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder.Entry();
+				entry.setKey(String.valueOf(temp));
+				entry.setValue(orderDetail.getProductOrdered().getName() + SEPARATOR_STR
+						+ df.format(orderDetail.getProductOrdered().getPrice() - discount) + SEPARATOR_STR
+						+ String.valueOf(orderDetail.getQuantite()));
+				entries.add(entry);
+				temp++;
+			}	
+		} else {
+			log.error("empty order | order has to be fulfil");
+		}
+		fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder.Entry entry 
+			= new fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder.Entry();
+		entry.setKey("total");
+		entry.setValue(df.format(total));
+		entries.add(entry);
+		
+		entry = new fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder.Entry();
+		entry.setKey("idOrder");
+		if (order != null) {
+			entry.setValue(order.getId().toString());
+		}
+		entries.add(entry);
+		
+		detailsOrder.getEntry().addAll(entries);
+		return detailsOrder;
+	}
+	
+	/**
+	 * Add customer infos to the SOAP WS
+	 * in order to choose packaging and shipping.
+	 * @param customer {@link Customer}
+	 * @param detailsOrder {@link DetailsOrder}
+	 * @return
+	 * @throws WineException {@link WineException}
+	 */
+	private DetailsOrder addCustomerInfosForShipping(Customer customer, 
+			DetailsOrder detailsOrder) throws WineException {
+		if (detailsOrder != null && !detailsOrder.getEntry().isEmpty()) {
+			fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder.Entry entry 
+				= new fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder.Entry();
+			// addd customer infos to the wine app
+			entry.setKey("customer");
+			entry.setValue(customer.getFirstname() + SEPARATOR_STR + customer.getLastname()
+					+ SEPARATOR_STR + customer.getAdress().getNumber() + SEPARATOR_STR
+					+ customer.getAdress().getStreet() + SEPARATOR_STR
+					+ customer.getAdress().getCity().getName() + SEPARATOR_STR
+					+ customer.getAdress().getCity().getRegion().getCountry().getName());
+			detailsOrder.getEntry().add(entry);
+		} else {
+			throw new WineException("empty order to send to the SOAP WS");
+		}
+		return detailsOrder;
+	}
+	
+	/**
 	 *
-	 * @param orderDetail
+	 * @param orderDetail {@link OrderDetail}
 	 * @return
 	 */
 	public double calculDiscount(OrderDetail orderDetail) {		 
@@ -174,5 +309,6 @@ public class BuOrder implements IBuOrder {
 	}
 	public void setPaymentPaypal(Payment paymentPaypal) {
 		this.paymentPaypal = paymentPaypal;
-	}	
+	}
+	
 }
