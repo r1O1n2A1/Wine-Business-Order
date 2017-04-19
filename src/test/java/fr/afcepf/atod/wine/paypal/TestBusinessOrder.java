@@ -3,6 +3,7 @@ package fr.afcepf.atod.wine.paypal;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -52,7 +53,7 @@ public class TestBusinessOrder {
 		nominal.getOrdersDetail().add(new OrderDetail(null, 2, nominal,
 				new Product(null, "romane", (double) 11250, "romanee conti")));
 	}
-
+	@Ignore
 	@Test
 	public void testCheckoutPaypal() throws WineException {
 		buOrder.checkoutPaypal(nominal,shipping,total);
