@@ -27,14 +27,14 @@ public interface IExpressCheckout {
      * 
      * @param detailsPayment
      * @return
-     *     returns fr.afcepf.wine.paypal.Payment
+     *     returns java.lang.String
      * @throws PayPalRESTException_Exception
      */
     @WebMethod
     @WebResult(name = "checkoutDone", targetNamespace = "")
     @RequestWrapper(localName = "checkoutPaypal", targetNamespace = "http://paypal.wine.afcepf.fr", className = "fr.afcepf.wine.paypal.CheckoutPaypal")
     @ResponseWrapper(localName = "checkoutPaypalResponse", targetNamespace = "http://paypal.wine.afcepf.fr", className = "fr.afcepf.wine.paypal.CheckoutPaypalResponse")
-    public Payment checkoutPaypal(
+    public String checkoutPaypal(
         @WebParam(name = "detailsPayment", targetNamespace = "")
         fr.afcepf.wine.paypal.CheckoutPaypal.DetailsPayment detailsPayment)
         throws PayPalRESTException_Exception
@@ -44,14 +44,14 @@ public interface IExpressCheckout {
      * 
      * @param paymentID
      * @return
-     *     returns fr.afcepf.wine.paypal.Payment
+     *     returns boolean
      * @throws PayPalRESTException_Exception
      */
     @WebMethod
     @WebResult(name = "paymentDone", targetNamespace = "")
     @RequestWrapper(localName = "retrievePayment", targetNamespace = "http://paypal.wine.afcepf.fr", className = "fr.afcepf.wine.paypal.RetrievePayment")
     @ResponseWrapper(localName = "retrievePaymentResponse", targetNamespace = "http://paypal.wine.afcepf.fr", className = "fr.afcepf.wine.paypal.RetrievePaymentResponse")
-    public Payment retrievePayment(
+    public boolean retrievePayment(
         @WebParam(name = "paymentID", targetNamespace = "")
         String paymentID)
         throws PayPalRESTException_Exception

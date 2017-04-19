@@ -1,5 +1,5 @@
 
-package fr.afcepf.wine.paypal;
+package fr.afcepf.atod.ws.soap.shipping;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for checkoutPaypalResponse complex type.
+ * <p>Java class for getIdShipping complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="checkoutPaypalResponse">
+ * &lt;complexType name="getIdShipping">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="checkoutDone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="idShipping" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,35 +26,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "checkoutPaypalResponse", propOrder = {
-    "checkoutDone"
+@XmlType(name = "getIdShipping", propOrder = {
+    "idShipping"
 })
-public class CheckoutPaypalResponse {
+public class GetIdShipping {
 
-    protected String checkoutDone;
+    protected String idShipping;
 
     /**
-     * Gets the value of the checkoutDone property.
+     * Gets the value of the idShipping property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCheckoutDone() {
-        return checkoutDone;
+    public String getIdShipping() {
+        return idShipping;
     }
 
     /**
-     * Sets the value of the checkoutDone property.
+     * Sets the value of the idShipping property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCheckoutDone(String value) {
-        this.checkoutDone = value;
+    public void setIdShipping(String value) {
+        this.idShipping = value;
     }
 
 }

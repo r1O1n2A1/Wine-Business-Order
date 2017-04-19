@@ -1,7 +1,5 @@
 package fr.afcepf.atod.wine.shipping;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -28,7 +26,6 @@ import fr.afcepf.atod.wine.entity.Order;
 import fr.afcepf.atod.wine.entity.OrderDetail;
 import fr.afcepf.atod.wine.entity.Product;
 import fr.afcepf.atod.wine.entity.Region;
-import fr.afcepf.wine.paypal.Address;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration()

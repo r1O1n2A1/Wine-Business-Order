@@ -19,7 +19,6 @@ import fr.afcepf.atod.wine.entity.Order;
 import fr.afcepf.atod.wine.entity.OrderDetail;
 import fr.afcepf.atod.wine.entity.Product;
 import fr.afcepf.atod.ws.soap.shipping.Exception_Exception;
-import fr.afcepf.atod.ws.soap.shipping.FollowOrder.DetailOrder;
 import fr.afcepf.atod.ws.soap.shipping.ISoapShippingService;
 import fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder;
 import fr.afcepf.atod.ws.soap.shipping.SoapShippingServiceService;
@@ -28,7 +27,6 @@ import fr.afcepf.wine.paypal.CheckoutPaypal.DetailsPayment.Entry;
 import fr.afcepf.wine.paypal.ExpressCheckoutServiceService;
 import fr.afcepf.wine.paypal.IExpressCheckout;
 import fr.afcepf.wine.paypal.PayPalRESTException_Exception;
-import fr.afcepf.wine.paypal.Payment;
 
 /**
  * Classe pour les règles de gestion lié à un {@link Order}
@@ -53,9 +51,8 @@ public class BuOrder implements IBuOrder {
 	private IDaoOrder daoOrder;
 	private IExpressCheckout proxy = null;
 	private ISoapShippingService proxyShipping = null;
-	private Payment paymentPaypal = null;
 	private DecimalFormat df = new DecimalFormat("0.##");
-	
+	private String idPayment;
 	public static final String SEPARATOR_STR = "|";
 	
 	@Override
@@ -111,11 +108,12 @@ public class BuOrder implements IBuOrder {
 		WineException wineException = null;
 		//setPaymentInfo to paypal
 		proxy = new ExpressCheckoutServiceService().getExpressCheckoutServicePort();
+		idPayment = "";
 		if (proxy != null) {
 			DetailsPayment detailsPayment = new DetailsPayment();
 			detailsPayment = setEntriesPaymentFromOrder(detailsPayment, order, shipping , total);
 			try {
-				paymentPaypal = proxy.checkoutPaypal(detailsPayment);
+				idPayment = proxy.checkoutPaypal(detailsPayment);
 			} catch (PayPalRESTException_Exception e) {
 				log.error(e);
 			}
@@ -304,11 +302,10 @@ public class BuOrder implements IBuOrder {
 		return discount;
 	}
 	
-	public Payment getPaymentPaypal() {
-		return paymentPaypal;
+	public String getIdPayment() {
+		return idPayment;
 	}
-	public void setPaymentPaypal(Payment paymentPaypal) {
-		this.paymentPaypal = paymentPaypal;
-	}
-	
+	public void setIdPayment(String idPayment) {
+		this.idPayment = idPayment;
+	}	
 }

@@ -25,6 +25,23 @@ public interface ISoapShippingService {
 
     /**
      * 
+     * @param idShipping
+     * @return
+     *     returns boolean
+     * @throws Exception_Exception
+     */
+    @WebMethod
+    @WebResult(name = "isExistingIdShipping", targetNamespace = "")
+    @RequestWrapper(localName = "getIdShipping", targetNamespace = "shipping.soap.ws.atod.afcepf.fr", className = "fr.afcepf.atod.ws.soap.shipping.GetIdShipping")
+    @ResponseWrapper(localName = "getIdShippingResponse", targetNamespace = "shipping.soap.ws.atod.afcepf.fr", className = "fr.afcepf.atod.ws.soap.shipping.GetIdShippingResponse")
+    public boolean getIdShipping(
+        @WebParam(name = "idShipping", targetNamespace = "")
+        String idShipping)
+        throws Exception_Exception
+    ;
+
+    /**
+     * 
      * @param detailOrder
      * @return
      *     returns java.lang.String

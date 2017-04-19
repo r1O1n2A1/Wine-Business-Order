@@ -8,11 +8,11 @@
 		<relativePath>../Wine-Parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>Wine-Business-Order</artifactId>
-	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
+			<version>3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>

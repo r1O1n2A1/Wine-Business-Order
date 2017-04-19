@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="paymentDone" type="{http://paypal.wine.afcepf.fr}payment" minOccurs="0"/>
+ *         &lt;element name="paymentDone" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,29 +31,21 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class RetrievePaymentResponse {
 
-    protected Payment paymentDone;
+    protected boolean paymentDone;
 
     /**
      * Gets the value of the paymentDone property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Payment }
-     *     
      */
-    public Payment getPaymentDone() {
+    public boolean isPaymentDone() {
         return paymentDone;
     }
 
     /**
      * Sets the value of the paymentDone property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Payment }
-     *     
      */
-    public void setPaymentDone(Payment value) {
+    public void setPaymentDone(boolean value) {
         this.paymentDone = value;
     }
 

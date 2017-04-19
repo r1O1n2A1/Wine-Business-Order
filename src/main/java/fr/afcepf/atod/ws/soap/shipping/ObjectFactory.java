@@ -27,7 +27,9 @@ public class ObjectFactory {
     private final static QName _FollowOrderResponse_QNAME = new QName("shipping.soap.ws.atod.afcepf.fr", "followOrderResponse");
     private final static QName _SetShippingResponse_QNAME = new QName("shipping.soap.ws.atod.afcepf.fr", "setShippingResponse");
     private final static QName _FollowOrder_QNAME = new QName("shipping.soap.ws.atod.afcepf.fr", "followOrder");
+    private final static QName _GetIdShippingResponse_QNAME = new QName("shipping.soap.ws.atod.afcepf.fr", "getIdShippingResponse");
     private final static QName _Exception_QNAME = new QName("shipping.soap.ws.atod.afcepf.fr", "Exception");
+    private final static QName _GetIdShipping_QNAME = new QName("shipping.soap.ws.atod.afcepf.fr", "getIdShipping");
     private final static QName _SetShipping_QNAME = new QName("shipping.soap.ws.atod.afcepf.fr", "setShipping");
 
     /**
@@ -70,6 +72,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetIdShippingResponse }
+     * 
+     */
+    public GetIdShippingResponse createGetIdShippingResponse() {
+        return new GetIdShippingResponse();
+    }
+
+    /**
      * Create an instance of {@link FollowOrderResponse }
      * 
      */
@@ -91,6 +101,14 @@ public class ObjectFactory {
      */
     public Exception createException() {
         return new Exception();
+    }
+
+    /**
+     * Create an instance of {@link GetIdShipping }
+     * 
+     */
+    public GetIdShipping createGetIdShipping() {
+        return new GetIdShipping();
     }
 
     /**
@@ -137,12 +155,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetIdShippingResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "shipping.soap.ws.atod.afcepf.fr", name = "getIdShippingResponse")
+    public JAXBElement<GetIdShippingResponse> createGetIdShippingResponse(GetIdShippingResponse value) {
+        return new JAXBElement<GetIdShippingResponse>(_GetIdShippingResponse_QNAME, GetIdShippingResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Exception }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "shipping.soap.ws.atod.afcepf.fr", name = "Exception")
     public JAXBElement<Exception> createException(Exception value) {
         return new JAXBElement<Exception>(_Exception_QNAME, Exception.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetIdShipping }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "shipping.soap.ws.atod.afcepf.fr", name = "getIdShipping")
+    public JAXBElement<GetIdShipping> createGetIdShipping(GetIdShipping value) {
+        return new JAXBElement<GetIdShipping>(_GetIdShipping_QNAME, GetIdShipping.class, null, value);
     }
 
     /**
