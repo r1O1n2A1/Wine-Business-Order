@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.xml.ws.BindingProvider;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,10 @@ import org.springframework.stereotype.Service;
 import fr.afcepf.atod.vin.data.exception.WineErrorCode;
 import fr.afcepf.atod.vin.data.exception.WineException;
 import fr.afcepf.atod.wine.business.order.api.IBuOrder;
+import fr.afcepf.atod.wine.business.ws.orchestrator.Commande;
+import fr.afcepf.atod.wine.business.ws.orchestrator.CommandePortType;
+import fr.afcepf.atod.wine.business.ws.orchestrator.CommandeRequest;
+import fr.afcepf.atod.wine.business.ws.orchestrator.CommandeResponse;
 import fr.afcepf.atod.wine.data.order.api.IDaoOrder;
 import fr.afcepf.atod.wine.entity.Customer;
 import fr.afcepf.atod.wine.entity.Order;
@@ -302,10 +308,33 @@ public class BuOrder implements IBuOrder {
 		return discount;
 	}
 	
+	@Override
+	public void lastCheck(Integer idProduit, Integer quantite, String idShipping, String idPayment)
+			throws WineException {
+		CommandePortType service = new Commande().getCommandePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+				"http://localhost:8080/ode/processes/Commande");
+		
+		
+		CommandeRequest request = new CommandeRequest();
+		request.setIdProduit(idProduit);
+		request.setIdLivraison(idShipping);
+		request.setIdPayment(idPayment);
+		request.setQteProduit(quantite);
+		
+		CommandeResponse response = service.process(request);
+		log.info(response);	
+	}
+	
+	
+	
+	
 	public String getIdPayment() {
 		return idPayment;
 	}
 	public void setIdPayment(String idPayment) {
 		this.idPayment = idPayment;
-	}	
+	}
+	
+	
 }

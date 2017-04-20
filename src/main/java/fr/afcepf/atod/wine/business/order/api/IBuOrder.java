@@ -60,4 +60,14 @@ public interface IBuOrder {
      */
     Order checkoutShipping(Customer customer, Order order, double total) 
     		throws WineException;
+    
+    /**
+     * Methode appelant l'orchestrateur
+     * @param idProduit
+     * @param quantite
+     * @param idShipping
+     * @param idPayment
+     * @throws WineException
+     */
+    void lastCheck(Integer idProduit, Integer quantite, String idShipping, String idPayment) throws WineException;
 }
