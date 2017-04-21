@@ -323,7 +323,12 @@ public class BuOrder implements IBuOrder {
 		request.setQteProduit(quantite);
 		
 		CommandeResponse response = service.process(request);
-		log.info(response);	
+		log.info("*********************************************************");
+		log.info("Commentaire : "+response.getCommentaire());
+		log.info("Status Stock : "+response.isStatusQuantite());
+		log.info("Status LIvraison : "+response.isStatusLivraison());
+		log.info("Status Payment : "+response.isStatusPayment());
+		log.info("*********************************************************");
 	}
 	
 	

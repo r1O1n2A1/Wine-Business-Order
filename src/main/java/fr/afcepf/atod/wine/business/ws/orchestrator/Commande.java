@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "Commande", targetNamespace = "http://afcepf.fr", wsdlLocation = "http://localhost:8080/ode/processes/Commande?wsdl")
+@WebServiceClient(name = "Commande", targetNamespace = "http://afcepf.fr", wsdlLocation = "http://192.168.102.34:8080/ode/processes/Commande?wsdl")
 public class Commande
     extends Service
 {
@@ -30,7 +30,7 @@ public class Commande
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://localhost:8080/ode/processes/Commande?wsdl");
+            url = new URL("http://192.168.102.34:8080/ode/processes/Commande?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
