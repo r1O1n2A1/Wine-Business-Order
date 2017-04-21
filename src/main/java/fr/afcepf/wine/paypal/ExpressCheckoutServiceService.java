@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "ExpressCheckoutServiceService", targetNamespace = "http://paypal.wine.afcepf.fr", wsdlLocation = "http://192.168.102.183:28080/Wine-Payment-1.0.0/expressCheckoutService?wsdl")
+@WebServiceClient(name = "ExpressCheckoutServiceService", targetNamespace = "http://paypal.wine.afcepf.fr", wsdlLocation = "http://192.168.102.70:28080/Wine-Payment-1.0.0/expressCheckoutService?wsdl")
 public class ExpressCheckoutServiceService
     extends Service
 {
@@ -30,7 +30,7 @@ public class ExpressCheckoutServiceService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://192.168.102.183:28080/Wine-Payment-1.0.0/expressCheckoutService?wsdl");
+            url = new URL("http://192.168.102.70:28080/Wine-Payment-1.0.0/expressCheckoutService?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
