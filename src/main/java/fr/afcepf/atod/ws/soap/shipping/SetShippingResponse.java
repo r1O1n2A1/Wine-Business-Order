@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="priceShipping" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -25,8 +26,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "setShippingResponse")
+@XmlType(name = "setShippingResponse", propOrder = {
+    "priceShipping"
+})
 public class SetShippingResponse {
 
+    protected String priceShipping;
+
+    /**
+     * Gets the value of the priceShipping property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPriceShipping() {
+        return priceShipping;
+    }
+
+    /**
+     * Sets the value of the priceShipping property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPriceShipping(String value) {
+        this.priceShipping = value;
+    }
 
 }

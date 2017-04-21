@@ -49,7 +49,7 @@ public interface IBuOrder {
      * @return
      * @throws WineException
      */
-    Order checkoutPaypal(Order order, double shipping, double total) 
+    String checkoutPaypal(Order order, double shipping, double total) 
     		throws WineException;
     
     /**
@@ -58,7 +58,7 @@ public interface IBuOrder {
      * @return
      * @throws WineException {@link WineException}
      */
-    Order checkoutShipping(Customer customer, Order order, double total) 
+    String checkoutShipping(Customer customer, Order order, double total) 
     		throws WineException;
     
     /**

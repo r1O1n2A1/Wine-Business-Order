@@ -110,7 +110,7 @@ public class BuOrder implements IBuOrder {
 	 * @see fr.afcepf.atod.wine.business.order.api.IBuOrder#checkoutPaypal(fr.afcepf.atod.wine.entity.Order)
 	 */
 	@Override
-	public Order checkoutPaypal(Order order, double shipping, double total) throws WineException {
+	public String checkoutPaypal(Order order, double shipping, double total) throws WineException {
 		WineException wineException = null;
 		//setPaymentInfo to paypal
 		proxy = new ExpressCheckoutServiceService().getExpressCheckoutServicePort();
@@ -129,7 +129,7 @@ public class BuOrder implements IBuOrder {
 		if (wineException != null) {
 			throw wineException;
 		}		
-		return order;
+		return idPayment;
 	}
 
 	/**
@@ -191,16 +191,17 @@ public class BuOrder implements IBuOrder {
 	 */
 	
 	@Override
-	public Order checkoutShipping(Customer customer, Order order, double total) 
+	public String checkoutShipping(Customer customer, Order order, double total) 
 			throws WineException {
 		WineException wineException = null;
 		proxyShipping = new SoapShippingServiceService().getSoapShippingServicePort();
 		DetailsOrder detailsOrder = new DetailsOrder();
+		String idPayment = "";
 		if (proxyShipping != null) {
 			detailsOrder = setDetailOrderForShipping(detailsOrder, order, total);
 			detailsOrder = addCustomerInfosForShipping(customer, detailsOrder);
 			try {
-				proxyShipping.setShipping(detailsOrder);
+				idPayment = proxyShipping.setShipping(detailsOrder);
 			} catch (Exception_Exception e) {
 				log.error(e);
 				wineException.setErreurVin(WineErrorCode.CA_NE_FONCTIONNE_PAS);
@@ -210,7 +211,7 @@ public class BuOrder implements IBuOrder {
 		if (wineException != null) {
 			throw wineException;
 		}
-		return order;
+		return idPayment;
 	}	
 		
 	/**
@@ -277,6 +278,7 @@ public class BuOrder implements IBuOrder {
 			entry.setValue(customer.getFirstname() + SEPARATOR_STR + customer.getLastname()
 					+ SEPARATOR_STR + customer.getAdress().getNumber() + SEPARATOR_STR
 					+ customer.getAdress().getStreet() + SEPARATOR_STR
+					+ customer.getAdress().getCity().getZipcode() + SEPARATOR_STR
 					+ customer.getAdress().getCity().getName() + SEPARATOR_STR
 					+ customer.getAdress().getCity().getRegion().getCountry().getName());
 			detailsOrder.getEntry().add(entry);
@@ -313,7 +315,7 @@ public class BuOrder implements IBuOrder {
 			throws WineException {
 		CommandePortType service = new Commande().getCommandePort();
 		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-				"http://localhost:8080/ode/processes/Commande");
+				"http://192.168.102.34:8080/ode/processes/Commande");
 		
 		
 		CommandeRequest request = new CommandeRequest();
@@ -339,7 +341,5 @@ public class BuOrder implements IBuOrder {
 	}
 	public void setIdPayment(String idPayment) {
 		this.idPayment = idPayment;
-	}
-	
-	
+	}	
 }

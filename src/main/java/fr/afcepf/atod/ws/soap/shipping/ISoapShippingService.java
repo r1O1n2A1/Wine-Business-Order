@@ -57,12 +57,15 @@ public interface ISoapShippingService {
     /**
      * 
      * @param detailsOrder
+     * @return
+     *     returns java.lang.String
      * @throws Exception_Exception
      */
     @WebMethod
+    @WebResult(name = "priceShipping", targetNamespace = "")
     @RequestWrapper(localName = "setShipping", targetNamespace = "shipping.soap.ws.atod.afcepf.fr", className = "fr.afcepf.atod.ws.soap.shipping.SetShipping")
     @ResponseWrapper(localName = "setShippingResponse", targetNamespace = "shipping.soap.ws.atod.afcepf.fr", className = "fr.afcepf.atod.ws.soap.shipping.SetShippingResponse")
-    public void setShipping(
+    public String setShipping(
         @WebParam(name = "detailsOrder", targetNamespace = "")
         fr.afcepf.atod.ws.soap.shipping.SetShipping.DetailsOrder detailsOrder)
         throws Exception_Exception
