@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "SoapShippingServiceService", targetNamespace = "shipping.soap.ws.atod.afcepf.fr", wsdlLocation = "http://localhost:28080/SOAPShipping-1.0.0/shippingCheckout?wsdl")
+@WebServiceClient(name = "SoapShippingServiceService", targetNamespace = "shipping.soap.ws.atod.afcepf.fr", wsdlLocation = "http://192.168.102.183:28080/SOAPShipping-1.0.0/shippingCheckout?wsdl")
 public class SoapShippingServiceService
     extends Service
 {
@@ -30,7 +30,7 @@ public class SoapShippingServiceService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://localhost:28080/SOAPShipping-1.0.0/shippingCheckout?wsdl");
+            url = new URL("http://192.168.102.183:28080/SOAPShipping-1.0.0/shippingCheckout?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
